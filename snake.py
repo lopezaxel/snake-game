@@ -11,6 +11,7 @@ class Game:
 
         self.settings = Settings()
         self.screen = pygame.display.set_mode(self.settings.screen_size)
+        pygame.display.set_caption("Snake")
 
     def start_game(self):
         while True:
@@ -29,11 +30,18 @@ class Game:
         if event.type == pygame.QUIT:
             sys.exit()
 
+class Snake:
+    def __init__(self):
+        self.settings = Settings()
+        self.snake = pygame.Rect(self.size, self.size * 2, 30, 40)
+        self.size = self.settings.block_size
 
 class Settings:
     def __init__(self):
         self.screen_size = [600, 600]
         self.background_color = (0, 0, 10)
+
+        self.block_size = 15
 
 game = Game()
 game.start_game()
