@@ -10,6 +10,7 @@ class Game:
         pygame.display.init()
 
         self.settings = Settings()
+        self.snake = Snake()
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         pygame.display.set_caption("Snake")
 
@@ -20,7 +21,13 @@ class Game:
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
+
+        Game.draw_obj(self, self.screen, self.settings.snake_color, self.snake.rect)
+        
         pygame.display.flip()
+
+    def draw_obj(self, screen, color, rect):
+        pygame.draw.rect(screen, color, rect)
 
     def check_input(self):
         for event in pygame.event.get():
@@ -33,8 +40,9 @@ class Game:
 class Snake:
     def __init__(self):
         self.settings = Settings()
-        self.snake = pygame.Rect(self.size, self.size * 2, 30, 40)
         self.size = self.settings.block_size
+        self.rect = pygame.Rect(self.size, self.size * 2, 30, 40)
+
 
 class Settings:
     def __init__(self):
@@ -42,6 +50,7 @@ class Settings:
         self.background_color = (0, 0, 10)
 
         self.block_size = 15
+        self.snake_color = (68, 198, 59)
 
 game = Game()
 game.start_game()
