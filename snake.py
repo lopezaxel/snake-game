@@ -1,7 +1,8 @@
 #! python3
 
-import pygame
 import sys
+
+import pygame
 
 class Game:
     def __init__(self):
@@ -13,15 +14,21 @@ class Game:
 
     def start_game(self):
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+            Game.check_input(self)
             Game.update_screen(self)
-
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
         pygame.display.flip()
+
+    def check_input(self):
+        for event in pygame.event.get():
+            Game.check_quit(self, event)
+
+    def check_quit(self, event):
+        if event.type == pygame.QUIT:
+            sys.exit()
+
 
 class Settings:
     def __init__(self):
