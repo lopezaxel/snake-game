@@ -1,5 +1,6 @@
 #! python3
 
+from random import randint
 import sys
 
 import pygame
@@ -11,6 +12,8 @@ class Game:
 
         self.settings = Settings()
         self.snake = Snake()
+        self.food = Food()
+
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         pygame.display.set_caption("Snake")
         self.running = True
@@ -25,13 +28,14 @@ class Game:
     def update_snake(self):
         if self.snake.check_hit_border(self.snake.rect):
             self.running = False
-            
+
         self.snake.update()
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
 
-        Game.draw_obj(self, self.screen, self.snake.color, self.snake.rect)
+        Game.draw_obj(self, self.screen, self.settings.snake_color, self.snake.rect)
+        Game.draw_obj(self, self.screen, self.settings.apple_color, self.food.rect)
 
         pygame.display.flip()
 
@@ -59,28 +63,25 @@ class Snake:
     def __init__(self):
         self.settings = Settings()
 
-        self.color = (68, 198, 59)
-        self.speed = 0.5
-
         self.x = 10
         self.y = 10
         self.rect = pygame.Rect(self.x, self.y, 20, 20)
         self.direction = 'down'
 
     def moveDown(self):
-        self.y += self.speed
+        self.y += self.settings.speed
         self.rect.y = int(self.y)
 
     def moveUp(self):
-        self.y -= self.speed
+        self.y -= self.settings.speed
         self.rect.y = int(self.y)
 
     def moveRight(self):
-        self.x += self.speed
+        self.x += self.settings.speed
         self.rect.x = int(self.x)
 
     def moveLeft(self):
-        self.x -= self.speed
+        self.x -= self.settings.speed
         self.rect.x = int(self.x)
 
     def update(self):
@@ -100,9 +101,14 @@ class Snake:
         if rect.bottom == 600 or rect.top == 0 or rect.right == 600 or rect.left == 0:
             return True
 
-# class Food:
-#     def __init__(self):
-#
+
+class Food:
+    def __init__(self):
+        self.settings = Settings()
+
+        self.x = randint(1, 599)
+        self.y = randint(1, 599)
+        self.rect = pygame.Rect(self.x, self.y, 10, 10)
 
 
 class Settings:
@@ -110,6 +116,10 @@ class Settings:
         self.screen_size = [600, 600]
         self.background_color = (0, 0, 10)
 
+        self.snake_color = (68, 198, 59)
+        self.speed = 0.5
+
+        self.apple_color = (255, 28, 28)
 
 
 game = Game()
