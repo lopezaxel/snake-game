@@ -23,6 +23,7 @@ class Game:
             Game.check_keyboard(self)
             if self.running:
                 Game.update_snake(self)
+                Game.update_apple(self)
             Game.update_screen(self)
 
     def update_snake(self):
@@ -30,6 +31,10 @@ class Game:
             self.running = False
 
         self.snake.update()
+
+    def update_apple(self):
+        if self.snake.rect.colliderect(self.food.rect):
+            self.food = Food()
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
