@@ -55,7 +55,9 @@ class Game:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_q:
+                sys.exit()
+            elif event.key == pygame.K_DOWN:
                 self.snake.change_direction('down')
             elif event.key == pygame.K_UP:
                 self.snake.change_direction('up')
@@ -113,7 +115,7 @@ class Food:
 
         self.x = randint(1, 599)
         self.y = randint(1, 599)
-        self.rect = pygame.Rect(self.x, self.y, 10, 10)
+        self.rect = pygame.Rect(self.x, self.y, 20, 20)
 
 
 class Settings:
