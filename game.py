@@ -17,13 +17,13 @@ class Game:
     def start_game(self):
         while True:
             Game.check_keyboard(self)
-            self.snake.move()
+            self.snake.update()
             Game.update_screen(self)
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
 
-        Game.draw_obj(self, self.screen, self.settings.snake_color, self.snake.rect)
+        Game.draw_obj(self, self.screen, self.snake.color, self.snake.rect)
 
         pygame.display.flip()
 
@@ -38,37 +38,53 @@ class Game:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN and self.snake.direction != 'up':
+            if event.key == pygame.K_DOWN:
                 self.snake.change_direction('down')
-            elif event.key == pygame.K_UP and self.snake.direction != 'down':
+            elif event.key == pygame.K_UP:
                 self.snake.change_direction('up')
-            elif event.key == pygame.K_LEFT and self.snake.direction != 'right':
+            elif event.key == pygame.K_LEFT:
                 self.snake.change_direction('left')
-            elif event.key == pygame.K_RIGHT and self.snake.direction != 'left':
+            elif event.key == pygame.K_RIGHT:
                 self.snake.change_direction('right')
 
 class Snake:
     def __init__(self):
         self.settings = Settings()
-        self.size = self.settings.block_size
-        self.rect = pygame.Rect(20, 50, self.size * 3, self.size * 8)
 
+        self.block = 8
+        self.color = (68, 198, 59)
+        self.speed = 0.5
+
+        self.x = 10
+        self.y = 10
+        self.rect = pygame.Rect(self.x, self.y, self.block * 3, self.block * 8)
         self.direction = 'down'
-        self.pos_float = [self.rect[0], self.rect[1]]
 
-    def move(self):
-        if self.direction == 'down':
-            self.pos_float[1] += self.settings.snake_speed
-            self.rect.bottom = int(self.pos_float[1])
-        elif self.direction == 'up':
-            self.pos_float[1] -= self.settings.snake_speed
-            self.rect.top = int(self.pos_float[1])
-        elif self.direction == 'right':
-            self.pos_float[0] += self.settings.snake_speed
-            self.rect.right = int(self.pos_float[0])
-        elif self.direction == 'left':
-            self.pos_float[0] -= self.settings.snake_speed
-            self.rect.left = int(self.pos_float[0])
+    def moveDown(self):
+        self.y += self.speed
+        self.rect.y = int(self.y)
+
+    def moveUp(self):
+        self.y -= self.speed
+        self.rect.y = int(self.y)
+
+    def moveRight(self):
+        self.x += self.speed
+        self.rect.x = int(self.x)
+
+    def moveLeft(self):
+        self.x -= self.speed
+        self.rect.x = int(self.x)
+
+    def update(self):
+        if self.direction == 'down' and self.direction != 'up':
+            Snake.moveDown(self)
+        elif self.direction == 'up' and self.direction != 'down':
+            Snake.moveUp(self)
+        elif self.direction == 'left' and self.direction != 'right':
+            Snake.moveLeft(self)
+        elif self.direction == 'right' and self.direction != 'left':
+            Snake.moveRight(self)
 
     def change_direction(self, direction):
         self.direction = direction
@@ -79,9 +95,7 @@ class Settings:
         self.screen_size = [600, 600]
         self.background_color = (0, 0, 10)
 
-        self.block_size = 8
-        self.snake_color = (68, 198, 59)
-        self.snake_speed = 0.3
+
 
 game = Game()
 game.start_game()
