@@ -13,12 +13,20 @@ class Game:
         self.snake = Snake()
         self.screen = pygame.display.set_mode(self.settings.screen_size)
         pygame.display.set_caption("Snake")
+        self.running = True
 
     def start_game(self):
         while True:
             Game.check_keyboard(self)
-            self.snake.update()
+            if self.running:
+                Game.update_snake(self)
             Game.update_screen(self)
+
+    def update_snake(self):
+        if self.snake.check_hit_border(self.snake.rect):
+            self.running = False
+            
+        self.snake.update()
 
     def update_screen(self):
         self.screen.fill(self.settings.background_color)
@@ -51,13 +59,12 @@ class Snake:
     def __init__(self):
         self.settings = Settings()
 
-        self.block = 8
         self.color = (68, 198, 59)
         self.speed = 0.5
 
         self.x = 10
         self.y = 10
-        self.rect = pygame.Rect(self.x, self.y, self.block * 3, self.block * 8)
+        self.rect = pygame.Rect(self.x, self.y, 20, 20)
         self.direction = 'down'
 
     def moveDown(self):
@@ -88,6 +95,14 @@ class Snake:
 
     def change_direction(self, direction):
         self.direction = direction
+
+    def check_hit_border(self, rect):
+        if rect.bottom == 600 or rect.top == 0 or rect.right == 600 or rect.left == 0:
+            return True
+
+# class Food:
+#     def __init__(self):
+#
 
 
 class Settings:
